@@ -15,9 +15,4 @@ app.use(bodyParser.json())
 // Middleware to parse URL-encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// A simple test route
-app.get('/hello', async (req, res) => {
-    res.json({ message: 'Hello!' });
-});
-
 module.exports = app;
