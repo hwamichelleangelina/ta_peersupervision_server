@@ -3,10 +3,6 @@ const app = require('./app');
 // Settings
 app.set('port', process.env.PORT || 3000);
 
-// Routers
-// var userBKRouter = require('./routers/bkusers_routes');
-// app.use('/bkusers', userBKRouter);
-
 var routerBKUser = require('./routers/bkuser_routes');
 var routerPSUser = require('./routers/psuser_routes');
 var routerResetPassUser = require('./routers/resetpass_routes');
