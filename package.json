@@ -1,7 +1,7 @@
 {
-  "name": "appserver",
+  "name": "ta_peersupervision_server",
   "version": "1.0.0",
-  "description": "tutorial about backend",
+  "description": "about backend",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
