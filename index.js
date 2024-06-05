@@ -18,14 +18,14 @@ app.use('/laporan', routerLaporan);
 app.use('/report', routerDownloadReport);
 app.use('/stats', routerStats);
 
+app.get('/hello', async (req, res) => {
+    res.json({ message: 'Hello!' });
+});
 
 app.get('/', async (req, res) => {
     res.json({ message: 'This is Peer ITB Supervision API for BK ITB.' });
 });
 
-app.get('/hello', async (req, res) => {
-    res.json({ message: 'Hello!' });
-});
 // Start the server
 app.listen(3000, () => {
     console.log('Server running on port 3000');
