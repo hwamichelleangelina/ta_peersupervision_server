@@ -1,5 +1,4 @@
 const mysql = require('mysql2');
-const bcrypt = require('bcrypt');
 
 // Koneksi ke MySQL
 const mysqlConn = mysql.createConnection({

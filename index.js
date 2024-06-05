@@ -1,8 +1,5 @@
 const app = require('./app');
 
-// Settings
-app.set('port', process.env.PORT || 3000);
-
 var routerBKUser = require('./routers/bkuser_routes');
 var routerPSUser = require('./routers/psuser_routes');
 var routerResetPassUser = require('./routers/resetpass_routes');
@@ -21,10 +18,14 @@ app.use('/laporan', routerLaporan);
 app.use('/report', routerDownloadReport);
 app.use('/stats', routerStats);
 
-app.listen(app.get('port'), () => {
-    console.log('Server is on port', app.get('port'));
-})
 
 app.get('/', async (req, res) => {
     res.json({ message: 'This is Peer ITB Supervision API for BK ITB.' });
 });
+// Start the server
+app.listen(3000, () => {
+    console.log('Server running on port 3000');
+});
+
+// Exporting app is usually not necessary unless it's for testing purposes
+module.exports = app;
