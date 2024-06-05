@@ -10,7 +10,7 @@ const mysqlConn = mysql.createConnection({
 
 mysqlConn.connect(function (error) {
     if (error) {
-        console.error('Error connecting to database:', err.message);
+        console.error('Error connecting to database:', error.message);
     } else {
         console.log('Connected to MySQL database: peersupervision.');
     }
@@ -21,7 +21,7 @@ mysqlConn.connect(function (error) {
 
   connection.query(query, (error, results, fields) => {
     if (error) {
-      console.error('An error occurred while executing the query:', error.stack);
+      console.error('An error occurred while executing the query');
       return;
     }
     console.log('Table altered successfully:', results);
@@ -33,7 +33,7 @@ mysqlConn.connect(function (error) {
 
   connection.query(bkuserquery, (error, results, fields) => {
     if (error) {
-      console.error('An error occurred while executing the query:', error.stack);
+      console.error('An error occurred while executing the query');
       return;
     }
     console.log('Table altered successfully:', results);
@@ -45,7 +45,7 @@ mysqlConn.connect(function (error) {
 
   connection.query(laporanquery, (error, results, fields) => {
     if (error) {
-      console.error('An error occurred while executing the query:', error.stack);
+      console.error('An error occurred while executing the query');
       return;
     }
     console.log('Table altered successfully:', results);
@@ -57,7 +57,7 @@ mysqlConn.connect(function (error) {
 
   connection.query(jadwalquery, (error, results, fields) => {
     if (error) {
-      console.error('An error occurred while executing the query:', error.stack);
+      console.error('An error occurred while executing the query');
       return;
     }
     console.log('Table altered successfully:', results);
@@ -69,7 +69,7 @@ mysqlConn.connect(function (error) {
 
   connection.query(dampinganquery, (error, results, fields) => {
     if (error) {
-      console.error('An error occurred while executing the query:', error.stack);
+      console.error('An error occurred while executing the query');
       return;
     }
     console.log('Table altered successfully:', results);
