@@ -1,5 +1,4 @@
 const app = require('./app');
-const cors = require('cors');
 
 // Settings
 app.set('port', process.env.PORT || 3000);
