@@ -33,6 +33,3 @@ app.listen(app.get('port'), () => {
 app.get('/', async (req, res) => {
     res.json({ message: 'This is Peer ITB Supervision API for BK ITB.' });
 });
-
-// Exporting app is usually not necessary unless it's for testing purposes
-module.exports = app;
