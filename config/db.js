@@ -67,7 +67,7 @@ mysqlConn.connect(function (error) {
   const dampinganquery = `ALTER TABLE \`peersupervision\`.\`dampingan\` 
                  CHANGE COLUMN \`dampinganadded\` \`dampinganadded\` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;`;
 
-  connection.query(query, (error, results, fields) => {
+  connection.query(dampinganquery, (error, results, fields) => {
     if (error) {
       console.error('An error occurred while executing the query:', error.stack);
       return;
