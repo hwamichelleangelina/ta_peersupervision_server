@@ -12,7 +12,7 @@ mysqlConn.connect(function (error) {
     if (error) {
         console.error('Error connecting to database:', err.message);
     } else {
-        console.log('Connected to MySQL database: peersupervision.');
+        console.log('Connected to MySQL database: Database peersupervision.');
     }
 });
 
