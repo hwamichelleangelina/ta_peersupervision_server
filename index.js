@@ -7,7 +7,7 @@ const { authorize, listData } = require('./config/sheets');
 const cron = require('node-cron');
 
 const app = express();
-const PORT = 80;
+const PORT = 8080;
 
 // Enable CORS for all origins
 app.use(cors());
