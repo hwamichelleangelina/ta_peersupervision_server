@@ -3,8 +3,8 @@ const mysql = require('mysql2');
 // Fungsi untuk membuat koneksi MySQL
 function createMySQLConnection() {
     const connection = mysql.createConnection({
-        host: '127.0.0.1',
-        user: 'peersupervision',
+        host: 'localhost',
+        user: 'root',
         password: 'supervise',
         database: 'peersupervision',
     });
