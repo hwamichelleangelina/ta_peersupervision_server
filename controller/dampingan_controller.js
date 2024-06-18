@@ -25,9 +25,34 @@ exports.getAllDampingan = (req, res) => {
     });
 };
 
+exports.getNoPSDampingan = (req, res) => {
+    dampingan.getNoPSDampingan((err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Database error' });
+        } else {
+            res.status(200).json(results);
+        }
+    });
+};
 
 exports.updateDataDampingan = (req, res) => {
-    const { reqid, newData } = req.body;
+    const reqid = req.params.reqid; // Mendapatkan reqid dari parameter URL
+    const { initial, fakultas, gender, angkatan, tingkat, kampus, mediakontak, kontak, katakunci, katakunci2, sesi, psname } = req.body;
+
+    const newData = {
+        initial,
+        fakultas,
+        gender,
+        angkatan,
+        tingkat,
+        kampus,
+        mediakontak,
+        kontak,
+        katakunci,
+        katakunci2,
+        sesi,
+        psname
+    };
 
     dampingan.updateDataDampingan(reqid, newData, (err, result) => {
         if (err) {
@@ -35,22 +60,6 @@ exports.updateDataDampingan = (req, res) => {
         } else {
             if (result.affectedRows > 0) {
                 res.status(200).json({ message: 'Dampingan Data updated successfully.', newData });
-            } else {
-                res.status(404).json({ message: 'Dampingan not found.' });
-            }
-        }
-    });
-};
-
-exports.updateDampinganTanggal = (req, res) => {
-    const { reqid, newTanggal } = req.body; // Ambil tanggal baru dari body request
-
-    dampingan.updateDampinganTanggal(reqid, newTanggal, (err, result) => {
-        if (err) {
-            res.status(500).json({ message: 'Failed to update tanggal dampingan.' });
-        } else {
-            if (result.affectedRows > 0) {
-                res.status(200).json({ message: 'Tanggal dampingan updated successfully.', newTanggal });
             } else {
                 res.status(404).json({ message: 'Dampingan not found.' });
             }
@@ -75,7 +84,7 @@ exports.deleteDampingan = (req, res) => {
 };
 
 exports.createDampingan = (req, res) => {
-    const { initial, fakultas, gender, angkatan, kampus, mediakontak, kontak, katakunci, sesi, tanggal, psname } = req.body;
+    const { initial, fakultas, gender, angkatan, tingkat, kampus, mediakontak, kontak, katakunci, katakunci2, sesi, psname } = req.body;
 
     // Persiapkan data untuk dimasukkan ke dalam model
     const dampinganData = {
@@ -83,12 +92,13 @@ exports.createDampingan = (req, res) => {
         fakultas,
         gender,
         angkatan,
+        tingkat,
         kampus,
         mediakontak,
         kontak,
         katakunci,
+        katakunci2,
         sesi,
-        tanggal,
         psname
     };
 
@@ -97,7 +107,9 @@ exports.createDampingan = (req, res) => {
             res.status(500).json({ message: 'Failed to create dampingan.', error: err });
         } else {
             if (result.affectedRows > 0) {
-                res.status(201).json({ message: 'Dampingan created successfully.' });
+                // Pastikan kita mendapatkan reqid baru yang telah dibuat
+                const reqid = result.insertId;
+                res.status(201).json({ message: 'Dampingan created successfully.', reqid: reqid });
             } else {
                 res.status(404).json({ message: 'User not found or no rows affected.' });
             }

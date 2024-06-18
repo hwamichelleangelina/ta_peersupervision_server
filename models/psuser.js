@@ -10,17 +10,14 @@ class psUser {
             }
             else if (result.length > 0) {
                 const psuser = result[0];
-                if (psuser.psisActive === 0) {
-                    callback(null, {inactive: true});
-                } else {
-                    bcrypt.compare(pspasswordhash, psuser.pspasswordhash, (err, isMatch) => {
-                        if (isMatch) {
-                            callback(null, psuser);
-                        } else {
-                            callback(null, null);
-                        }
-                    });
-                }
+                bcrypt.compare(pspasswordhash, psuser.pspasswordhash, (err, result) => {
+                    if (result) {
+                        callback(null, psuser);
+                    }
+                    else {
+                        callback(null, null);
+                    }
+                });
             }
             else {
                 callback(null, null);
@@ -114,8 +111,8 @@ class psUser {
             psname as Nama,
             psnim as NIM,
             case 
-                when psisAdmin = 1 then 'Kadiv Kuratif'
-                else 'Anggota PS'
+                when psisAdmin = 1 then 'Admin'
+                else 'Anggota'
             end as Role
         from 
             psusers
@@ -137,8 +134,8 @@ class psUser {
             psnim as NIM,
             pstahunaktif as Tahun,
             case 
-                when psisAdmin = 1 then 'Kadiv Kuratif'
-                else 'Anggota PS'
+                when psisAdmin = 1 then 'Admin'
+                else 'Anggota'
             end as Role
         from 
             psusers
