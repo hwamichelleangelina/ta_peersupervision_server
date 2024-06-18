@@ -60,7 +60,7 @@ function listData(auth, callback) {
             if (filteredRows.length) {
                 const queryCheck = 'SELECT * FROM dampingan WHERE initial = ? AND kontak = ? AND sesi = ?';
                 const queryInsert = 'INSERT INTO dampingan (initial, gender, fakultas, angkatan, tingkat, kampus, mediakontak, kontak, sesi) VALUES ?';
-                
+
                 const values = filteredRows.map(row => [
                     row[header.indexOf('Kalau boleh tau nama kamu siapa nih?? (mau Anonim juga boleh kok)')],
                     row[header.indexOf('Jenis kelamin')],
