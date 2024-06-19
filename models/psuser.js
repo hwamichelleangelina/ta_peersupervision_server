@@ -119,7 +119,7 @@ class psUser {
         where
             psisActive = 1
         order by
-            Role desc,
+            Role asc,
             Nama asc;`;
         mysqlConn.query(query, (err, results) => {
             if (err) {
@@ -145,7 +145,7 @@ class psUser {
         where
             psisActive = 0
         order by
-            Role desc,
+            Role asc,
             Nama asc;`;
         mysqlConn.query(query, (err, results) => {
             if (err) {
