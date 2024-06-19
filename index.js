@@ -8,7 +8,7 @@ const { authorize, listData } = require('./config/sheets');
 const cron = require('node-cron');
 
 const app = express();
-const PORT = process.env.PORT || 443;
+const PORT = process.env.PORT || 8080;
 
 // Enable CORS for specific origin
 const allowedOrigins = ['https://itb-peersupervision.netlify.app'];
