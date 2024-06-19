@@ -7,17 +7,29 @@ const { authorize, listData } = require('./config/sheets');
 const cron = require('node-cron');
 
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
-// Enable CORS for all origins
-app.use(cors());
+// Enable CORS for specific origin
+const allowedOrigins = ['https://itb-peersupervision.netlify.app'];
 
-// Middleware untuk parsing application/json
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+
+// Middleware untuk parsing application/json dan application/x-www-form-urlencoded
 app.use(bodyParser.json());
-
-// Middleware untuk parsing application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Import routes
 var routerBKUser = require('./routers/bkuser_routes');
 var routerPSUser = require('./routers/psuser_routes');
 var routerResetPassUser = require('./routers/resetpass_routes');
@@ -28,6 +40,7 @@ const routerDownloadReport = require('./routers/download_report_routes');
 const routerStats = require('./routers/statistic_routes');
 const routerRujukan = require('./routers/rujukan_routes');
 
+// Use routes
 app.use('/bkusers', routerBKUser);
 app.use('/psusers', routerPSUser);
 app.use('/users', routerResetPassUser);
@@ -73,6 +86,12 @@ cron.schedule('0 * * * *', () => {
             listData(auth);
         });
     });
+});
+
+// Middleware untuk menangani kesalahan
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
 });
 
 app.listen(PORT, () => {
