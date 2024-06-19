@@ -117,7 +117,10 @@ class psUser {
         from 
             psusers
         where
-            psisActive = 1;`;
+            psisActive = 1
+        order by
+            Role desc,
+            Nama asc;`;
         mysqlConn.query(query, (err, results) => {
             if (err) {
                 callback(err, null);
@@ -140,7 +143,10 @@ class psUser {
         from 
             psusers
         where
-            psisActive = 0;`;
+            psisActive = 0
+        order by
+            Role desc,
+            Nama asc;`;
         mysqlConn.query(query, (err, results) => {
             if (err) {
                 callback(err, null);
@@ -158,7 +164,9 @@ class psUser {
         FROM
             psusers
         WHERE
-            psisActive = 1;`;
+            psisActive = 1
+        order by
+            psname asc;`;
         mysqlConn.query(query, (err, results) => {
             if (err) {
                 callback(err, null);

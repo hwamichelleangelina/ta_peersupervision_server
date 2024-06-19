@@ -14,7 +14,7 @@ class laporan {
     }
 
     static getLaporan(callback) {
-        const getLaporanQuery = 'SELECT *, CONVERT_TZ(tanggal, \'+00:00\', \'+07:00\') AS tanggalKonversi FROM laporan;';
+        const getLaporanQuery = 'SELECT *, CONVERT_TZ(tanggal, \'+00:00\', \'+07:00\') AS tanggalKonversi FROM laporan ORDER BY tanggalKonversi;';
         mysqlConn.query(getLaporanQuery, (err, result) => {
             if (err) {
                 callback(err, null);
