@@ -3,11 +3,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
+const https = require('https');
 const { authorize, listData } = require('./config/sheets');
 const cron = require('node-cron');
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 443;
 
 // Enable CORS for specific origin
 const allowedOrigins = ['https://itb-peersupervision.netlify.app'];
@@ -88,6 +89,12 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// Baca file sertifikat dan kunci
+const privateKey = fs.readFileSync('server.key', 'utf8');
+const certificate = fs.readFileSync('server.cert', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
+
+// Buat server HTTPS
+https.createServer(credentials, app).listen(PORT, () => {
+    console.log(`Server running on https://localhost:${PORT}`);
 });
