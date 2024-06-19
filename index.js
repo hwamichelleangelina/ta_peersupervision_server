@@ -47,7 +47,7 @@ app.get('/hello', async (req, res) => {
 });
 
 app.get('/', async (req, res) => {
-    res.json({ message: 'This is Peer ITB Supervision API for BK ITB.' });
+    res.json({ message: 'You are now allowed to access Peer ITB Supervision App as Pendamping Sebaya or Bimbingan Konseling ITB. Please continue to login page.' });
 });
 
 app.get('/fetch-data', async (req, res) => {
