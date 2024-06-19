@@ -10,15 +10,11 @@ const cron = require('node-cron');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Enable CORS for specific origin
-const allowedOrigins = ['https://itb-peersupervision.netlify.app'];
+const corsOption = {
+    origin: ['https://itb-peersupervision.netlify.app']
+    }
 
-const corsOptions = {
-    origin: '*', // Mengizinkan semua origin sementara
-    optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
+app.use(cors(corsOption));
 
 // Middleware untuk parsing application/json dan application/x-www-form-urlencoded
 app.use(bodyParser.json());
