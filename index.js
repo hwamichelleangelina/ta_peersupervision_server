@@ -13,13 +13,7 @@ const PORT = process.env.PORT || 8080;
 const allowedOrigins = ['https://itb-peersupervision.netlify.app'];
 
 const corsOptions = {
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: '*', // Mengizinkan semua origin sementara
     optionsSuccessStatus: 200
 };
 
