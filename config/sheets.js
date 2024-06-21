@@ -52,6 +52,7 @@ function listData(auth, callback) {
             const indexOfflineKonseling2 = header.lastIndexOf('Kira-kira apakah kamu perlu konseling offline?');
             const indexContactOrListen = header.indexOf('Apa kamu mau dikontak atau didengerin langsung terkait cerita unek2 kamu?');
 
+            // Filtering the rows based on conditions
             const filteredRows = rows.slice(1).filter(row => {
                 const answer1 = row[indexOfflineKonseling1];
                 const answer2 = row[indexOfflineKonseling2];
@@ -124,5 +125,3 @@ function listData(auth, callback) {
         }
     });
 }
-
-module.exports = { authorize, listData };
