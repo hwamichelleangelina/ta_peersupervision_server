@@ -50,11 +50,13 @@ function listData(auth, callback) {
             const header = rows[0];
             const indexOfflineKonseling1 = header.indexOf('Kira-kira apakah kamu perlu konseling offline?');
             const indexOfflineKonseling2 = header.lastIndexOf('Kira-kira apakah kamu perlu konseling offline?');
+            const indexContactOrListen = header.indexOf('Apa kamu mau dikontak atau didengerin langsung terkait cerita unek2 kamu?');
 
             const filteredRows = rows.slice(1).filter(row => {
                 const answer1 = row[indexOfflineKonseling1];
                 const answer2 = row[indexOfflineKonseling2];
-                return answer1 !== null || answer2 !== null;
+                const contactOrListenAnswer = row[indexContactOrListen];
+                return (answer1 !== null || answer2 !== null) && contactOrListenAnswer !== 'Tidak';
             });
 
             if (filteredRows.length) {
