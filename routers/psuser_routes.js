@@ -12,7 +12,7 @@ routerPSUser.post('/loginPSUsers', psUserController.loginPSUsers);
 
 // UNTUK ADMIN BK EDIT ANGGOTA PS
 routerPSUser.post('/registerPSUsers', psUserController.registerPSUsers);
-routerPSUser.delete('/deletePSUsers', psUserController.deletePSUsers);
+routerPSUser.delete('/deletePSUsers/:psnim', psUserController.deletePSUsers);
 routerPSUser.put('/updatePSUsers', psUserController.updatePSUsers);
 routerPSUser.put('/nonActivateUsers', psUserController.nonActiveUsers);
 routerPSUser.put('/activateUsers', psUserController.ActiveUsers);
