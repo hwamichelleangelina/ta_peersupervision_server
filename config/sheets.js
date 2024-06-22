@@ -1,4 +1,3 @@
-// googleSheets.js
 const fs = require('fs');
 const { google } = require('googleapis');
 const mysqlConn = require('../config/db');
@@ -53,7 +52,6 @@ function listData(auth, callback) {
             const indexOfflineKonseling2 = header.lastIndexOf('Kira-kira apakah kamu perlu konseling offline?');
             const indexContactOrListen = header.indexOf('Apa kamu mau dikontak atau didengerin langsung terkait cerita unek2 kamu?');
 
-            // Filtering the rows based on conditions
             const filteredRows = rows.slice(1).filter(row => {
                 const answer1 = row[indexOfflineKonseling1];
                 const answer2 = row[indexOfflineKonseling2];
@@ -92,46 +90,51 @@ function listData(auth, callback) {
                                     VALUES (?, ?, 0);
                                 `;
 
-                                // Ambil reqid dari baris paling bawah (baru)
                                 mysqlConn.query(getLastReqIdQuery, (err, results) => {
                                     if (err) {
                                         return mysqlConn.rollback(() => {
                                             console.error('Error getting last reqid:', err);
-                                            callback(err, null);
+                                            if (typeof callback === 'function') {
+                                                callback(err, null);
+                                            }
                                         });
                                     }
 
                                     const reqid = results[0].reqid;
-                                    const initial = filteredValues[0][0]; // Ambil nilai initial dari data yang sudah dimasukkan
+                                    const initial = filteredValues[0][0];
 
-                                    // Buat data baru dalam tabel rujukan
                                     mysqlConn.query(createRujukanQuery, [reqid, initial], (err, result) => {
                                         if (err) {
                                             return mysqlConn.rollback(() => {
                                                 console.error('Error creating rujukan:', err);
-                                                callback(err, null);
+                                                if (typeof callback === 'function') {
+                                                    callback(err, null);
+                                                }
                                             });
                                         }
 
-                                        // Commit transaksi jika semua query berhasil
                                         mysqlConn.commit((err) => {
                                             if (err) {
                                                 return mysqlConn.rollback(() => {
                                                     console.error('Error committing transaction:', err);
-                                                    callback(err, null);
+                                                    if (typeof callback === 'function') {
+                                                        callback(err, null);
+                                                    }
                                                 });
                                             }
 
-                                            callback(null, result);
+                                            if (typeof callback === 'function') {
+                                                callback(null, result);
+                                            }
                                         });
                                     });
                                 });
                                 console.log('Data inserted into MySQL');
-                                if (callback) {
+                                if (typeof callback === 'function') {
                                     callback(filteredRows);
                                 }
                             });
-                        } else if (callback) {
+                        } else if (typeof callback === 'function') {
                             callback(filteredRows);
                         }
                         return;
@@ -156,13 +159,13 @@ function listData(auth, callback) {
                 checkAndInsert(0);
             } else {
                 console.log('No data found.');
-                if (callback) {
+                if (typeof callback === 'function') {
                     callback([]);
                 }
             }
         } else {
             console.log('No data found.');
-            if (callback) {
+            if (typeof callback === 'function') {
                 callback([]);
             }
         }
