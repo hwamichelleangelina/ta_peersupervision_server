@@ -32,7 +32,7 @@ exports.registerPSUsers = (req, res) => {
 }
 
 exports.deletePSUsers = (req, res) => {
-    const { psnim } = req.params.psnim;
+    const { psnim } = req.params;
 
     psUser.deleteaPSUsers(psnim, (err, result) => {
         if (err) {
