@@ -102,6 +102,7 @@ function listData(auth, callback) {
                                     }
 
                                     const reqid = results[0].reqid;
+                                    const initial = filteredValues[0][0]; // Ambil nilai initial dari data yang sudah dimasukkan
 
                                     // Buat data baru dalam tabel rujukan
                                     mysqlConn.query(createRujukanQuery, [reqid, initial], (err, result) => {
