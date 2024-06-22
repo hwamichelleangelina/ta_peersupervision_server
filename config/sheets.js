@@ -1,3 +1,4 @@
+// googleSheets.js
 const fs = require('fs');
 const { google } = require('googleapis');
 const mysqlConn = require('../config/db');
@@ -62,6 +63,7 @@ function listData(auth, callback) {
 
             if (filteredRows.length) {
                 const queryCheck = 'SELECT * FROM dampingan WHERE initial = ? AND kontak = ? AND sesi = ?';
+                const queryInsert = 'INSERT INTO dampingan (initial, gender, fakultas, angkatan, tingkat, kampus, mediakontak, kontak, sesi) VALUES ?';
 
                 const values = filteredRows.map(row => [
                     row[header.indexOf('Kalau boleh tau nama kamu siapa nih?? (mau Anonim juga boleh kok)')],
@@ -80,13 +82,8 @@ function listData(auth, callback) {
                 const checkAndInsert = (index) => {
                     if (index >= values.length) {
                         if (filteredValues.length > 0) {
-                            // Function to create data in dampingan and rujukan
-                            const createDampinganAndRujukan = (dampinganData, callback) => {
-                                const { initial, fakultas, gender, angkatan, tingkat, kampus, mediakontak, kontak, katakunci, katakunci2, sesi, psname } = dampinganData;
-                                const createDampinganQuery = `
-                                    INSERT INTO dampingan (initial, fakultas, gender, angkatan, tingkat, kampus, mediakontak, kontak, katakunci, katakunci2, sesi, psnim, psname)
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT psnim FROM psusers WHERE psname = ?), ?);
-                                `;
+                            mysqlConn.query(queryInsert, [filteredValues], (error) => {
+                                if (error) throw error;
                                 const getLastReqIdQuery = `
                                     SELECT reqid FROM dampingan ORDER BY reqid DESC LIMIT 1;
                                 `;
@@ -95,91 +92,44 @@ function listData(auth, callback) {
                                     VALUES (?, ?, 0);
                                 `;
 
-                                // Mulai transaksi
-                                mysqlConn.beginTransaction((err) => {
+                                // Ambil reqid dari baris paling bawah (baru)
+                                mysqlConn.query(getLastReqIdQuery, (err, results) => {
                                     if (err) {
-                                        console.error('Error starting transaction:', err);
-                                        callback(err, null);
-                                        return;
+                                        return mysqlConn.rollback(() => {
+                                            console.error('Error getting last reqid:', err);
+                                            callback(err, null);
+                                        });
                                     }
 
-                                    // Jalankan query untuk membuat data dampingan
-                                    mysqlConn.query(createDampinganQuery, [
-                                        initial, fakultas, gender, angkatan, tingkat, kampus, mediakontak, kontak, katakunci, katakunci2, sesi, psname, psname
-                                    ], (err, result) => {
+                                    const reqid = results[0].reqid;
+
+                                    // Buat data baru dalam tabel rujukan
+                                    mysqlConn.query(createRujukanQuery, [reqid, initial], (err, result) => {
                                         if (err) {
                                             return mysqlConn.rollback(() => {
-                                                console.error('Error creating dampingan:', err);
+                                                console.error('Error creating rujukan:', err);
                                                 callback(err, null);
                                             });
                                         }
 
-                                        // Ambil reqid dari baris paling bawah (baru)
-                                        mysqlConn.query(getLastReqIdQuery, (err, results) => {
+                                        // Commit transaksi jika semua query berhasil
+                                        mysqlConn.commit((err) => {
                                             if (err) {
                                                 return mysqlConn.rollback(() => {
-                                                    console.error('Error getting last reqid:', err);
+                                                    console.error('Error committing transaction:', err);
                                                     callback(err, null);
                                                 });
                                             }
 
-                                            const reqid = results[0].reqid;
-
-                                            // Buat data baru dalam tabel rujukan
-                                            mysqlConn.query(createRujukanQuery, [reqid, initial], (err, result) => {
-                                                if (err) {
-                                                    return mysqlConn.rollback(() => {
-                                                        console.error('Error creating rujukan:', err);
-                                                        callback(err, null);
-                                                    });
-                                                }
-
-                                                // Commit transaksi jika semua query berhasil
-                                                mysqlConn.commit((err) => {
-                                                    if (err) {
-                                                        return mysqlConn.rollback(() => {
-                                                            console.error('Error committing transaction:', err);
-                                                            callback(err, null);
-                                                        });
-                                                    }
-
-                                                    callback(null, result);
-                                                });
-                                            });
+                                            callback(null, result);
                                         });
                                     });
                                 });
-                            };
-
-                            filteredValues.forEach(value => {
-                                const [initial, gender, fakultas, angkatan, tingkat, kampus, mediakontak, kontak, sesi] = value;
-                                const dampinganData = {
-                                    initial,
-                                    gender,
-                                    fakultas,
-                                    angkatan,
-                                    tingkat,
-                                    kampus,
-                                    mediakontak,
-                                    kontak,
-                                    katakunci: '',
-                                    katakunci2: '',
-                                    sesi,
-                                    psname: '' // Add appropriate psname if needed
-                                };
-
-                                createDampinganAndRujukan(dampinganData, (err, result) => {
-                                    if (err) {
-                                        console.error('Error creating dampingan and rujukan:', err);
-                                    } else {
-                                        console.log('Data inserted into MySQL');
-                                    }
-                                });
+                                console.log('Data inserted into MySQL');
+                                if (callback) {
+                                    callback(filteredRows);
+                                }
                             });
-
-                            if (callback) {
-                                callback(filteredRows);
-                            }
                         } else if (callback) {
                             callback(filteredRows);
                         }
