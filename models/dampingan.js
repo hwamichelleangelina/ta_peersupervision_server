@@ -170,16 +170,43 @@ class dampingan {
         });
     }
 
-    static deleteDampingan(reqid, callback) {
-        const deleteDampinganQuery = 'delete from dampingan where reqid = ?;';
+static deleteDampingan(reqid, callback) {
+    const deleteDampinganQuery = 'DELETE FROM dampingan WHERE reqid = ?;';
+    const deleteRujukanQuery = 'DELETE FROM rujukan WHERE reqid = ?;';
+
+    mysqlConn.beginTransaction((err) => {
+        if (err) {
+            return callback(err, null);
+        }
+
         mysqlConn.query(deleteDampinganQuery, [reqid], (err, result) => {
             if (err) {
-                callback(err, null);
-            } else {
-                callback(null, result);
+                return mysqlConn.rollback(() => {
+                    callback(err, null);
+                });
             }
+
+            mysqlConn.query(deleteRujukanQuery, [reqid], (err, result) => {
+                if (err) {
+                    return mysqlConn.rollback(() => {
+                        callback(err, null);
+                    });
+                }
+
+                mysqlConn.commit((err) => {
+                    if (err) {
+                        return mysqlConn.rollback(() => {
+                            callback(err, null);
+                        });
+                    }
+
+                    callback(null, result);
+                });
+            });
         });
-    }
+    });
+}
+
 
     static getCountPendampingan(reqid, callback) {
         const getCountPendampinganQuery = 'SELECT COUNT(*) as count FROM jadwal WHERE reqid = ?;';
