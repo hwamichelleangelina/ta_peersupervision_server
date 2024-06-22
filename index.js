@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 8080;
 
 const corsOption = {
     origin: ['https://itb-peersupervision.netlify.app']
-    }
+}
 
 app.use(cors(corsOption));
 
@@ -21,10 +21,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Import routes
-var routerBKUser = require('./routers/bkuser_routes');
-var routerPSUser = require('./routers/psuser_routes');
-var routerResetPassUser = require('./routers/resetpass_routes');
-var routerDampingan = require('./routers/dampingan_routes');
+const routerBKUser = require('./routers/bkuser_routes');
+const routerPSUser = require('./routers/psuser_routes');
+const routerResetPassUser = require('./routers/resetpass_routes');
+const routerDampingan = require('./routers/dampingan_routes');
 const routerJadwal = require('./routers/jadwal_routes');
 const routerLaporan = require('./routers/laporan_routes');
 const routerDownloadReport = require('./routers/download_report_routes');

@@ -1,3 +1,4 @@
+// googleSheets.js
 const fs = require('fs');
 const { google } = require('googleapis');
 const mysqlConn = require('../config/db');
@@ -125,3 +126,5 @@ function listData(auth, callback) {
         }
     });
 }
+
+module.exports = { authorize, listData };
