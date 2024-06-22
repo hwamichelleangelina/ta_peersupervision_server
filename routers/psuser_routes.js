@@ -15,6 +15,7 @@ routerPSUser.post('/registerPSUsers', psUserController.registerPSUsers);
 routerPSUser.delete('/deletePSUsers', psUserController.deletePSUsers);
 routerPSUser.put('/updatePSUsers', psUserController.updatePSUsers);
 routerPSUser.put('/nonActivateUsers', psUserController.nonActiveUsers);
+routerPSUser.put('/activateUsers', psUserController.ActiveUsers);
 routerPSUser.get('/getAllPSUsers', psUserController.getAllPSUsers);
 routerPSUser.get('/getNAUsers', psUserController.getNAPSUsers);
 routerPSUser.get('/getActivePS', psUserController.getActivePS);
